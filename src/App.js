@@ -1,25 +1,58 @@
+import { useState } from 'react';
 import './App.css';
+import Alert from './components/Alert';
 import Navbar from './components/Navbar';
+import Textfield from './components/Textfield';
+import About from './components/About';
 
-let name = "Prince";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
+
+  const [mode, setMode] = useState('light');
+
+  const toggleMode = () => {
+    setMode((mode === 'light') ? ('dark') : ('light'));
+
+    if (mode === 'light') {
+      showAlert('Dark mode enabled');
+    } else {
+      showAlert('Dark mode disabled');
+    }
+  }
+
+  if (mode === 'light') {
+    document.body.style.backgroundColor = '#fff';
+    document.body.style.color = '#343a40';
+  }
+  else {
+    document.body.style.backgroundColor = '#1b242d';
+    document.body.style.color = '#fff';
+  }
+
+  const [message, setMessage] = useState(null);
+
+  const showAlert = (msg) => {
+    setMessage(msg);
+
+    setTimeout(() => {
+      setMessage(null);
+    }, 2000);
+  }
+
   return (
-    <>
+    <BrowserRouter>
 
-      <Navbar heading="TextUtils" aboutText="About TextUtills"/>
-      <Navbar heading="Another_navbar"/>
-      <Navbar heading="Components_OP"/>
+      <Navbar heading="TextUtils" aboutText="About TextUtills" toggleMode={toggleMode} mode={mode} />
+      <Alert status='Success' message={message} />
 
+      <Routes>
 
-      <h1>Hi there, I am {name}</h1>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos laboriosam debitis modi excepturi neque voluptatum amet eaque omnis a iusto.
-      </p>
-      <img src="https://images.unsplash.com/photo-1646182984866-73a5a9bb3617?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80" alt="Unsplash" />
-    
-    
-    </>
+      <Route exact path="/" element={<Textfield heading="Enter text to analyze below" showAlert={showAlert} />} />
+      <Route exact path="/about" element={<About />} />
+
+      </Routes>
+    </BrowserRouter>    
   );
 }
 

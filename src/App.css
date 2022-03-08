@@ -1,0 +1,18 @@
+* {
+    transition: background-color 0.5s;
+}
+
+#carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (max-width: 600px) {
+    #carousel img {
+        width: 80vw;
+    }
+    #carousel {
+        flex-direction: column;
+    }
+}
