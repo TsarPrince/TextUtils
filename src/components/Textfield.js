@@ -19,8 +19,6 @@ export default function Textfield(props) {
     props.showAlert('Text copied to clipboard');
   }
 
-
-
   const [btnText, setBtnText] = useState('Start reading');
   const [timerStarted, setTimerStarted] = useState(false);
   const [timer, setTimer] = useState();
@@ -63,21 +61,25 @@ export default function Textfield(props) {
           {/* onChange event handler has to be used for changing text */}
           <textarea className='form-control' id='textarea' rows='5' value={text} onChange={handleOnChange}></textarea>
 
-          <button className='btn btn-primary my-3 mx-1' onClick={convertToUpperCase}>Convert to Uppercase</button>
-          <button className='btn btn-primary my-3 mx-1' onClick={convertToLowerCase}>Convert to Lowercase</button>
-          <button className='btn btn-primary my-3 mx-1' onClick={copy}>Copy text</button>
+          <button disabled={text.length === 0} className='btn btn-primary my-3 mx-1' onClick={convertToUpperCase}>Convert to Uppercase</button>
+          <button disabled={text.length === 0} className='btn btn-primary my-3 mx-1' onClick={convertToLowerCase}>Convert to Lowercase</button>
+          <button disabled={text.length === 0} className='btn btn-primary my-3 mx-1' onClick={copy}>Copy text</button>
 
         </div>
       </div>
 
       <div className='container my-3'>
         <h2>Your text summary</h2>
-        <p>{text.split('\n').length} line(s), {text.split(' ').length} word(s), {text.length} character(s)</p>
-        <p>Average read time: {0.24 * text.split(' ').length} seconds</p>
+        {/* 
+        /\s+/ --> regex considers all kind of whitespaces (inlcuding \n)
+              --> also takes care of multiple spaces
+        */}
+        <p>{text.split('\n').filter(ele => ele !== "").length} line(s), {text.split(/\s+/).filter(ele => ele !== "").length} word(s), {text.length} character(s)</p>
+        <p>Average read time: {0.24 * text.split(/\s+/).filter(ele => ele !== "").length} seconds</p>
 
 
         <p id='timeTaken'>Record the time taken by you to read the text by clicking on "Start reading" button and see how you  perform against an average reader.</p>
-        <button className='btn btn-success' id='startTimerBtn' onClick={startTimer}>{btnText}</button>
+        <button disabled={text.length === 0} className='btn btn-success' id='startTimerBtn' onClick={startTimer}>{btnText}</button>
 
       </div>
     </>
